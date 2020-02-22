@@ -19,6 +19,9 @@
                       <div class="panel-title"> Signup</div>
                        </div>  
                   <div class="panel-body">
+                    <% if(msg !=''){ %>
+                      <p style="text-align: center">   <%= msg %></p>
+                      <% } %>
                       <form action="/signup" id="EmployeeForm" class="form-horizontal" method="post"  role="form">
                           
                           <div id="signupalert" style="display:none" class="alert alert-danger">

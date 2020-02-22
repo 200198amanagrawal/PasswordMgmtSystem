@@ -20,7 +20,12 @@
                        </div>  
                   <div class="panel-body" >
                       <form action="/" id="EmployeeForm" class="form-horizontal" method="post"  role="form">
-                          
+                        <div class="panel-body">
+                          <% if(msg !=''){ %>
+                            <div id="signupalert" class="alert alert-danger">
+                            <p style="text-align: center">   <%= msg %></p>
+                          </div>
+                          <% } %>
                           <div class="form-group">
                               <label for="username" class="col-md-3 control-label">User Name</label>
                               <div class="col-md-9">

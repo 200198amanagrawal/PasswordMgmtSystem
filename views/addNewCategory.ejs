@@ -31,7 +31,7 @@
                         </ul></li>
                         <li><a href="/logout">Logout</a></li>
                   </ul>
-                  <div class="navbar-header" style="float: right;"> <a class="navbar-brand" href="#">Loggedin As: </a></div>
+                  <div class="navbar-header" style="float: right;">  <a class="navbar-brand" href="#">Loggedin As: <% if(loginUser){ %> <%= loginUser  %> <% } %></a></div>
                 </div>
               </nav>
               <div class="container">
