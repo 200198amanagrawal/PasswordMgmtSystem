@@ -48,7 +48,15 @@ return res.render('signup', { title: 'Password Management System', msg:'Username
 }
 
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Password Management System',msg:"" });
+  var loginUser=localStorage.getItem('loginUser');
+  if(loginUser)
+  {
+    res.redirect("./dashboard");
+  }
+  else
+  {
+    res.render('index', { title: 'Password Management System',msg:"" });
+  }
 });
 
 router.post('/', function(req, res, next) {
@@ -73,7 +81,15 @@ router.post('/', function(req, res, next) {
 });
 
 router.get('/signup', function(req, res, next) {
-  res.render('signup', { title: 'Password Management System',msg:"", });
+  var loginUser=localStorage.getItem('loginUser');
+  if(loginUser)
+  {
+    res.redirect("./dashboard");
+  }
+  else
+  {
+    res.render('signup', { title: 'Password Management System',msg:"", });
+  }
 });
 
 router.post('/signup',checkUsername,checkEmail, function(req, res, next) {
@@ -108,19 +124,18 @@ router.get('/dashboard',checkLoginUser, function(req, res, next) {
 });
 
 router.get('/passwordCategory',checkLoginUser, function(req, res, next) {
-  res.render('password_category', { title: 'Password Management System',msg:"" });
+  var loginUser=localStorage.getItem('loginUser');
+  res.render('password_category', { title: 'Password Management System',msg:"",loginUser:loginUser });
 });
 
 router.get('/add-new-category',checkLoginUser, function(req, res, next) {
-  res.render('addNewCategory', { title: 'Password Management System' ,msg:""});
-});
-
-router.get('/add-new-password',checkLoginUser, function(req, res, next) {
-  res.render('add-new-password', { title: 'Password Management System',msg:"" });
+  var loginUser=localStorage.getItem('loginUser');
+  res.render('addNewCategory', { title: 'Password Management System' ,msg:"",loginUser:loginUser});
 });
 
 router.get('/view-all-password',checkLoginUser, function(req, res, next) {
-  res.render('view-all-password', { title: 'Password Management System',msg:"" });
+  var loginUser=localStorage.getItem('loginUser');
+  res.render('view-all-password', { title: 'Password Management System',msg:"",loginUser:loginUser });
 });
 
 router.get('/logout', function(req, res, next) {
