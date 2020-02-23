@@ -229,15 +229,46 @@ router.post('/add-new-category',checkLoginUser, [ check('passwordCategory','Ente
     
       });
       });
-  
+  //this one is used for simply you are typing view-all-password in your browser.The npm mongoose-paginate is used here for simpler code.
 router.get('/view-all-password',checkLoginUser, function(req, res, next) {
   var loginUser=localStorage.getItem('loginUser');
-  getAllPass.exec(function(err,data){
-    if(err) throw err;
-    res.render('view-all-password', { title: 'Password Management System',loginUser:loginUser,records: data});
+  var options = {
+    offset:   1, 
+    limit:    3
+};
+
+passModel.paginate({},options).then(function(result){
+ //console.log(result);
+res.render('view-all-password', { title: 'Password Management System',
+loginUser: loginUser,
+records: result.docs,
+  current: result.offset,
+  pages: Math.ceil(result.total / result.limit) 
+    });
   });
-  
 });
+//this piece of code written without usage of plugin and is written in order if you are changes the pages then it will reflect in your browser.
+router.get('/view-all-password/:page',checkLoginUser, function(req, res, next) {
+   
+  var loginUser=localStorage.getItem('loginUser');
+
+  var perPage = 3;
+  var page = req.params.page || 1;
+
+  getAllPass.skip((perPage * page) - perPage)
+  .limit(perPage).exec(function(err,data){
+if(err) throw err;
+passModel.countDocuments({}).exec((err,count)=>{    
+res.render('view-all-password', { title: 'Password Management System',
+loginUser: loginUser,
+records: data,
+  current: page,
+  pages: Math.ceil(count / perPage) 
+      });
+    });
+  });
+});
+
 
 router.get('/password-detail',checkLoginUser, function(req, res, next) {
   res.redirect('/dashboard');
