@@ -4,8 +4,11 @@ var userModule=require('../modules/user');
 var bcrypt=require('bcryptjs');
 var jwt = require('jsonwebtoken');
 var passCatModel = require('../modules/password_category');
+var passModel=require('../modules/add_password')
 var getPassCat= passCatModel.find({});
 const { check, validationResult } = require('express-validator');
+
+var getAllPass= passModel.find({});
 
 /* GET home page. */
 if (typeof localStorage === "undefined" || localStorage === null) {
@@ -153,7 +156,7 @@ router.get('/passwordCategory/edit/:id', checkLoginUser,function(req, res, next)
   getpassCategory.exec(function(err,data){
     if(err) throw err;
  
-    res.render('edit_password_category', { title: 'Password Management System',loginUser: loginUser,errors:'',success:'',records:data,id:passcat_id});
+    res.render('edit_password _category', { title: 'Password Management System',loginUser: loginUser,errors:'',success:'',records:data,id:passcat_id});
 
   });
 });
@@ -197,6 +200,36 @@ router.post('/add-new-category',checkLoginUser, [ check('passwordCategory','Ente
   });
 
 
+  router.get('/add-new-password',checkLoginUser, function(req, res, next) {
+    var loginUser=localStorage.getItem('loginUser');
+      getPassCat.exec(function(err,data){
+    if(err) throw err;
+    res.render('add-new-password', { title: 'Password Management System',loginUser: loginUser,records: data,success:''});
+    
+      });
+    });
+  
+    router.post('/add-new-password', checkLoginUser,function(req, res, next) {
+      var loginUser=localStorage.getItem('loginUser');
+  var pass_cat= req.body.pass_cat;
+  var project_name= req.body.project_name;
+  var pass_details= req.body.pass_details;
+  var password_details= new passModel({
+    password_category:pass_cat,
+    project_name:project_name,
+    password_detail:pass_details
+  });
+      
+    password_details.save(function(err,doc){
+      getPassCat.exec(function(err,data){
+        if(err) throw err;
+      res.render('add-new-password', { title: 'Password Management System',loginUser: loginUser,records: data,success:"Password Details Inserted Successfully"});
+    
+    });
+    
+      });
+      });
+  
 router.get('/view-all-password',checkLoginUser, function(req, res, next) {
   var loginUser=localStorage.getItem('loginUser');
   res.render('view-all-password', { title: 'Password Management System',msg:"",loginUser:loginUser });
