@@ -125,10 +125,6 @@ router.post('/signup',checkUsername,checkEmail, function(req, res, next) {
   
 });
 
-router.get('/dashboard',checkLoginUser, function(req, res, next) {
-  var loginUser=localStorage.getItem('loginUser');
-  res.render('dashboard', { title: 'Password Management System',msg:"",loginUser:loginUser });
-});
 
 router.get('/passwordCategory',checkLoginUser, function(req, res, next) {
   var loginUser=localStorage.getItem('loginUser');
