@@ -232,7 +232,11 @@ router.post('/add-new-category',checkLoginUser, [ check('passwordCategory','Ente
   
 router.get('/view-all-password',checkLoginUser, function(req, res, next) {
   var loginUser=localStorage.getItem('loginUser');
-  res.render('view-all-password', { title: 'Password Management System',msg:"",loginUser:loginUser });
+  getAllPass.exec(function(err,data){
+    if(err) throw err;
+    res.render('view-all-password', { title: 'Password Management System',loginUser:loginUser,records: data});
+  });
+  
 });
 
 router.get('/logout', function(req, res, next) {
