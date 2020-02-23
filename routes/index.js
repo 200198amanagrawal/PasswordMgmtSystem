@@ -239,6 +239,51 @@ router.get('/view-all-password',checkLoginUser, function(req, res, next) {
   
 });
 
+router.get('/password-detail',checkLoginUser, function(req, res, next) {
+  res.redirect('/dashboard');
+});
+
+router.get('/password-detail/edit/:id',checkLoginUser, function(req, res, next) {
+  var loginUser=localStorage.getItem('loginUser');
+  var id =req.params.id;
+  var getPassDetails=passModel.findById({_id:id});
+  getPassDetails.exec(function(err,data){
+if(err) throw err;
+getPassCat.exec(function(err,data1){
+res.render('edit_password_detail', { title: 'Password Management System',loginUser: loginUser,records:data1,record:data,success:'' });
+});
+});
+});
+
+router.post('/password-detail/edit/:id',checkLoginUser, function(req, res, next) {
+  var loginUser=localStorage.getItem('loginUser');
+  var id =req.params.id;
+  var passcat= req.body.pass_cat;
+  var project_name= req.body.project_name;
+  var pass_details= req.body.pass_details;
+  passModel.findByIdAndUpdate(id,{password_category:passcat,project_name:project_name,password_detail:pass_details}).exec(function(err){
+  if(err) throw err;
+    var getPassDetails=passModel.findById({_id:id});
+  getPassDetails.exec(function(err,data){
+if(err) throw err;
+getPassCat.exec(function(err,data1){
+res.render('edit_password_detail', { title: 'Password Management System',loginUser: loginUser,records:data1,record:data,success:'Password Updated Successfully' });
+});
+});
+});
+});
+
+router.get('/password-detail/delete/:id', checkLoginUser,function(req, res, next) {
+  var loginUser=localStorage.getItem('loginUser');
+  var id =req.params.id;
+  var passdelete=passModel.findByIdAndDelete(id);
+  passdelete.exec(function(err){
+    if(err) throw err;
+    res.redirect('/view-all-password/');
+  });
+});
+
+
 router.get('/logout', function(req, res, next) {
   localStorage.removeItem('userToken');
   localStorage.removeItem('loginUser');
